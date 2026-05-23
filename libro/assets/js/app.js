@@ -433,6 +433,37 @@ function cargarDatosDemoVenezuela() {
 // --- EVENTOS Y TRIGGERS CONTABLES ---
 
 function configurarEventos() {
+    // Formateadores automáticos de R.I.F. / Cédula Venezolana
+    const inputContactoTax = document.getElementById('contacto-tax-id');
+    const inputBeneficiarioTax = document.getElementById('beneficiario-tax-id');
+    const selectContacto = document.getElementById('contacto-documento-tipo');
+    const selectBeneficiario = document.getElementById('beneficiario-documento-tipo');
+
+    if (inputContactoTax) {
+        inputContactoTax.addEventListener('input', aplicarFormatoRif);
+        inputContactoTax.addEventListener('blur', aplicarFormatoRif);
+    }
+    if (inputBeneficiarioTax) {
+        inputBeneficiarioTax.addEventListener('input', aplicarFormatoRif);
+        inputBeneficiarioTax.addEventListener('blur', aplicarFormatoRif);
+    }
+    if (selectContacto) {
+        selectContacto.addEventListener('change', () => {
+            const input = document.getElementById('contacto-tax-id');
+            if (input) {
+                input.value = formatearRif(input.value, selectContacto.value);
+            }
+        });
+    }
+    if (selectBeneficiario) {
+        selectBeneficiario.addEventListener('change', () => {
+            const input = document.getElementById('beneficiario-tax-id');
+            if (input) {
+                input.value = formatearRif(input.value, selectBeneficiario.value);
+            }
+        });
+    }
+
     // Navegación Sidebar (SPA tabs)
     document.querySelectorAll('.nav-item button').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -1326,6 +1357,9 @@ function filtrarContactos() {
 function abrirModalContacto(tipoDefault = 'cliente') {
     document.getElementById('form-contacto').reset();
     document.getElementById('contacto-id').value = '';
+    if (document.getElementById('contacto-documento-tipo')) {
+        document.getElementById('contacto-documento-tipo').value = 'RIF';
+    }
     document.getElementById('contacto-type').value = tipoDefault;
     document.getElementById('contacto-especial').value = 'no';
     document.getElementById('modal-contacto-title').innerText = 'Registrar R.I.F. de Contacto';
@@ -1373,6 +1407,9 @@ function editarContacto(id) {
     if (!c) return;
 
     document.getElementById('contacto-id').value = c.id;
+    if (document.getElementById('contacto-documento-tipo')) {
+        document.getElementById('contacto-documento-tipo').value = determinarTipoDoc(c.tax_id);
+    }
     document.getElementById('contacto-tax-id').value = c.tax_id;
     document.getElementById('contacto-name').value = c.name;
     document.getElementById('contacto-type').value = c.type;
@@ -2360,6 +2397,9 @@ function filtrarBeneficiarios() {
 function abrirModalBeneficiario() {
     document.getElementById('form-beneficiario').reset();
     document.getElementById('beneficiario-id').value = '';
+    if (document.getElementById('beneficiario-documento-tipo')) {
+        document.getElementById('beneficiario-documento-tipo').value = 'RIF';
+    }
     document.getElementById('modal-beneficiario-title').innerText = 'Registrar Beneficiario';
     document.getElementById('modal-beneficiario').classList.add('active');
 }
@@ -2433,6 +2473,9 @@ function editarBeneficiario(id) {
 
     document.getElementById('beneficiario-id').value = b.id;
     document.getElementById('beneficiario-name').value = b.name;
+    if (document.getElementById('beneficiario-documento-tipo')) {
+        document.getElementById('beneficiario-documento-tipo').value = determinarTipoDoc(b.tax_id);
+    }
     document.getElementById('beneficiario-tax-id').value = b.tax_id;
     document.getElementById('beneficiario-especial').value = b.especial || 'no';
     document.getElementById('beneficiario-retenciones').value = b.retencionesAnteriores || 0;
@@ -2495,3 +2538,94 @@ window.abrirModalBeneficiario = abrirModalBeneficiario;
 window.cerrarModalBeneficiario = cerrarModalBeneficiario;
 window.editarBeneficiario = editarBeneficiario;
 window.eliminarBeneficiario = eliminarBeneficiario;
+
+function aplicarFormatoRif(e) {
+    const input = e.target;
+    
+    // Auto-detectar si empieza por J, G, C para forzar R.I.F.
+    const clean = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    if (clean.length > 0) {
+        const firstChar = clean.charAt(0);
+        if (/^[JGC]$/.test(firstChar)) {
+            const selectId = (input.id === 'contacto-tax-id') ? 'contacto-documento-tipo' : 'beneficiario-documento-tipo';
+            const selectEl = document.getElementById(selectId);
+            if (selectEl && selectEl.value !== 'RIF') {
+                selectEl.value = 'RIF';
+            }
+        }
+    }
+
+    if (e.inputType && e.inputType.startsWith('delete')) {
+        return; // Permitir borrar guiones sin re-escribirlos
+    }
+
+    // Obtener tipo de documento seleccionado
+    let tipoDoc = 'RIF';
+    if (input.id === 'contacto-tax-id') {
+        tipoDoc = document.getElementById('contacto-documento-tipo').value;
+    } else if (input.id === 'beneficiario-tax-id') {
+        tipoDoc = document.getElementById('beneficiario-documento-tipo').value;
+    }
+
+    const originalVal = input.value;
+    const formatted = formatearRif(originalVal, tipoDoc);
+    if (originalVal !== formatted) {
+        input.value = formatted;
+    }
+}
+
+function formatearRif(val, tipoDoc = 'RIF') {
+    let clean = val.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    if (clean.length === 0) return '';
+    
+    let prefix = clean.charAt(0);
+    let numbers = '';
+    
+    if (/^[VEJGPC]$/.test(prefix)) {
+        numbers = clean.slice(1);
+    } else {
+        // Prefijo por defecto según el tipo de documento seleccionado
+        prefix = (tipoDoc === 'CEDULA') ? 'V' : 'J';
+        numbers = clean;
+    }
+    
+    numbers = numbers.replace(/[^0-9]/g, '');
+    
+    if (numbers.length === 0) {
+        return prefix + '-';
+    }
+    
+    if (tipoDoc === 'CEDULA') {
+        // Formato Cédula (V-12345678, sin guión final, máximo 8 números)
+        return prefix + '-' + numbers.slice(0, 8);
+    } else {
+        // Formato RIF tradicional (J-12345678-9, 8 números + 1)
+        if (numbers.length <= 8) {
+            return prefix + '-' + numbers;
+        } else {
+            let base = numbers.slice(0, 8);
+            let verifier = numbers.slice(8, 9);
+            return prefix + '-' + base + '-' + verifier;
+        }
+    }
+}
+
+function determinarTipoDoc(taxId) {
+    if (!taxId) return 'RIF';
+    const clean = taxId.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const prefix = clean.charAt(0);
+    
+    if (/^[JGC]$/.test(prefix)) {
+        return 'RIF';
+    }
+    
+    // Si tiene dos guiones en el formato o más de 8 números, es RIF
+    const hasTwoHyphens = (taxId.match(/-/g) || []).length > 1;
+    const digitsOnly = taxId.replace(/[^0-9]/g, '');
+    if (hasTwoHyphens || digitsOnly.length > 8) {
+        return 'RIF';
+    }
+    
+    return 'CEDULA';
+}
+

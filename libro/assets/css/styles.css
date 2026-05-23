@@ -976,3 +976,29 @@ body {
     width: 24px;
     height: 24px;
 }
+
+/* Estilos para Logo Personalizado */
+.dashboard-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.dashboard-logo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    background-color: #ffffff;
+    padding: 6px;
+    border: 1px solid var(--border-color);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    transition: transform var(--transition-normal);
+}
+
+.dashboard-logo-img:hover {
+    transform: scale(1.05);
+}
+

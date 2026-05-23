@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libro Fiscal y Declaración Forma 30 SENIAT</title>
+    <link rel="icon" type="image/webp" href="assets/OIP.webp">
     <!-- Estilos de la Aplicación -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <!-- Estilos de la Forma 30 y Desglose Fiscal de Venezuela -->
@@ -22,7 +23,9 @@
         <aside class="sidebar">
             <div class="sidebar-header-mobile">
                 <div class="brand">
-                    <div class="brand-icon">Bs</div>
+                    <div class="brand-icon" style="background: #ffffff; padding: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-glow);">
+                        <img src="assets/OIP.webp" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: inherit;">
+                    </div>
                     <div class="brand-name">LibroFiscalVE</div>
                 </div>
                 <button class="menu-toggle u-style-4">
@@ -187,6 +190,9 @@
                     </div>
                     
                     <div class="card flex u-style-12">
+                        <div class="dashboard-logo-container">
+                            <img src="assets/OIP.webp" alt="Logo General" class="dashboard-logo-img">
+                        </div>
                         <div class="card-title">Ingreso Rápido de Facturas</div>
                         <button onclick="abrirModalCompra()" class="btn btn-success u-style-13">
                             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -952,8 +958,15 @@
                 
                 <div class="form-row u-style-65">
                     <div class="input-group">
-                        <label for="contacto-tax-id">R.I.F. (N° de Registro) *</label>
-                        <input type="text" id="contacto-tax-id" class="input-control" placeholder="Ej: J-12345678-9 o V-12345678-0" required>
+                        <label for="contacto-documento-tipo">Tipo Documento</label>
+                        <select id="contacto-documento-tipo" class="input-control">
+                            <option value="RIF">R.I.F.</option>
+                            <option value="CEDULA">Cédula</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="contacto-tax-id">N° de Registro *</label>
+                        <input type="text" id="contacto-tax-id" class="input-control" placeholder="Ej: J-12345678-9 o V-15678901" required>
                     </div>
                     <div class="input-group">
                         <label for="contacto-type">Tipo de Contacto *</label>
@@ -1021,7 +1034,14 @@
 
                 <div class="form-row u-style-65">
                     <div class="input-group">
-                        <label for="beneficiario-tax-id">R.I.F. (J-12345678-9) *</label>
+                        <label for="beneficiario-documento-tipo">Tipo Documento</label>
+                        <select id="beneficiario-documento-tipo" class="input-control">
+                            <option value="RIF">R.I.F.</option>
+                            <option value="CEDULA">Cédula</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="beneficiario-tax-id">N° de Registro *</label>
                         <input type="text" id="beneficiario-tax-id" class="input-control" required placeholder="J-12345678-9">
                     </div>
                     <div class="input-group">

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { DatabaseSync } = require('node:sqlite');
@@ -546,9 +546,13 @@ function createWindow() {
     const preloadPath = path.join(__dirname, 'preload.js');
     console.log('Cargando script de preload desde:', preloadPath);
 
+    const iconPath = path.join(__dirname, 'libro', 'assets', 'OIP.webp');
+    const appIcon = nativeImage.createFromPath(iconPath);
+
     mainWindow = new BrowserWindow({
         width: 1300,
         height: 850,
+        icon: appIcon,
         backgroundColor: '#111827', // Fondo oscuro coincidente con styles.css para evitar parpadeo blanco
         webPreferences: {
             preload: preloadPath,
