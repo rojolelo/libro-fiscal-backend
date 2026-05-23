@@ -1,0 +1,20 @@
+{
+  "name": "libro-fiscal-seniat",
+  "version": "1.0.0",
+  "description": "Sistema de Libro Fiscal y Declaración Forma 30 SENIAT con Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "seniat",
+    "libro-fiscal",
+    "venezuela"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^42.2.0"
+  }
+}

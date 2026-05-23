@@ -1,0 +1,201 @@
+/* Estilos adicionales específicos para Venezuela */
+.fiscal-rates-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    background-color: rgba(255, 255, 255, 0.01);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+.fiscal-rates-table th, .fiscal-rates-table td {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.fiscal-rates-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: left;
+}
+.retention-box {
+    display: none;
+    background-color: var(--color-primary-glow);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 16px;
+    margin-top: 12px;
+    animation: slideDown 0.25s ease;
+}
+.retention-box.active {
+    display: block;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Estilos de la Forma 30 del SENIAT */
+.seniat-form-layout {
+    background-color: #fff;
+    color: #000;
+    border: 2px solid #000;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+    border-radius: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+.seniat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px double #000;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+.seniat-title-box {
+    text-align: center;
+    flex-grow: 1;
+}
+.seniat-title-box h2 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 2px 0;
+    text-transform: uppercase;
+}
+.seniat-title-box h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 2px 0;
+}
+.seniat-meta-info {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    border: 1px solid #000;
+    margin-bottom: 16px;
+    font-size: 0.8rem;
+}
+.seniat-meta-info > div {
+    padding: 8px 12px;
+}
+.seniat-meta-info > div:first-child {
+    border-right: 1px solid #000;
+}
+.seniat-section-header {
+    background-color: #f1f5f9;
+    font-weight: bold;
+    padding: 6px 10px;
+    border: 1px solid #000;
+    margin-top: 12px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+.seniat-grid {
+    display: grid;
+    grid-template-columns: auto 80px 140px 140px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+.seniat-grid-header {
+    background-color: #f8fafc;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    display: contents;
+}
+.seniat-row {
+    display: contents;
+    font-size: 0.75rem;
+}
+.seniat-cell {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+}
+.seniat-cell.num {
+    justify-content: flex-end;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+}
+.seniat-cell.border-r {
+    border-right: 1px solid #000;
+}
+.seniat-row:last-child .seniat-cell {
+    border-bottom: 1px solid #000;
+}
+.seniat-total-row {
+    display: contents;
+    font-weight: bold;
+}
+.seniat-total-row .seniat-cell {
+    background-color: #f8fafc;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+.seniat-total-row .seniat-cell.num {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+}
+.casilla-badge {
+    background-color: #000;
+    color: #fff;
+    padding: 1px 4px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    margin-right: 6px;
+    border-radius: 0;
+    display: inline-block;
+    width: 22px;
+    text-align: center;
+}
+.barcode-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+.barcode-lines {
+    display: flex;
+    height: 30px;
+    align-items: stretch;
+    background: #000;
+    padding: 1px;
+}
+.barcode-bar {
+    background: #fff;
+    margin-right: 1px;
+    height: 100%;
+}
+.print-footer-seals {
+    display: none;
+}
+@media print {
+    .seniat-form-layout {
+        border: 2px solid #000 !important;
+        box-shadow: none !important;
+        padding: 10px !important;
+    }
+    .seniat-cell {
+        border-bottom: 1px solid #000 !important;
+    }
+    .print-footer-seals {
+        display: flex !important;
+        justify-content: space-between;
+        margin-top: 40px;
+        font-size: 0.7rem;
+        font-weight: bold;
+    }
+    .print-seal-box {
+        border: 1px dashed #000;
+        width: 200px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+    }
+}
